@@ -1,0 +1,56 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Head2Head
+    network: chapel
+    source:
+      address: "0xD97025fE249D5EF553a228D1835800cf0CD79BE9"
+      abi: Head2Head
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Head2HeadBetCancelled
+        - Head2HeadBetPlaced
+        - Head2HeadBetUpdated
+        - Head2HeadEmergencyFundsWithdraw
+        - Head2HeadGameCreated
+        - Head2HeadGameWinAmountSent
+        - Head2HeadPricesUpdated
+        - Head2HeadUpdateOrCancelBetAmountReturned
+        - Head2HeadWinningStockUpdated
+        - OwnershipTransferred
+        - Paused
+        - Unpaused
+      abis:
+        - name: Head2Head
+          file: ./abis/Head2Head.json
+      eventHandlers:
+        - event: Head2HeadBetCancelled(indexed uint256,address,indexed uint256)
+          handler: handleHead2HeadBetCancelled
+        - event: Head2HeadBetPlaced(indexed uint256,indexed address,indexed uint256,uint256)
+          handler: handleHead2HeadBetPlaced
+        - event: Head2HeadBetUpdated(indexed uint256,indexed address,indexed uint256,uint256,uint256)
+          handler: handleHead2HeadBetUpdated
+        - event: Head2HeadEmergencyFundsWithdraw(indexed uint256,address,uint256,uint256)
+          handler: handleHead2HeadEmergencyFundsWithdraw
+        - event: Head2HeadGameCreated(indexed uint256,indexed uint256[2],uint256,uint256,uint256,uint256,uint256)
+          handler: handleHead2HeadGameCreated
+        - event: Head2HeadGameWinAmountSent(indexed uint256,address,uint256,uint256)
+          handler: handleHead2HeadGameWinAmountSent
+        - event: Head2HeadPricesUpdated(indexed uint256,uint256[2],uint256[2],uint256[2])
+          handler: handleHead2HeadPricesUpdated
+        - event: Head2HeadUpdateOrCancelBetAmountReturned(uint256,address,uint256,uint256)
+          handler: handleHead2HeadUpdateOrCancelBetAmountReturned
+        - event: Head2HeadWinningStockUpdated(indexed uint256,uint256)
+          handler: handleHead2HeadWinningStockUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/head-2-head.ts
