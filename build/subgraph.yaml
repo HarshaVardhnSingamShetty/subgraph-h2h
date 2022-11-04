@@ -1,6 +1,6 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: h2h
@@ -17,17 +17,19 @@ dataSources:
         - Head2HeadGame
       abis:
         - name: h2h
-          file: ./abis/h2h.json
+          file: h2h/abis/h2h.json
       eventHandlers:
         - event: Head2HeadBetCancelled(indexed uint256,address,indexed bytes12)
           handler: handleHead2HeadBetCancelled
         - event: Head2HeadBetPlaced(indexed uint256,indexed address,indexed bytes12,uint256)
           handler: handleHead2HeadBetPlaced
-        - event: Head2HeadBetUpdated(indexed uint256,indexed address,indexed bytes12,uint256,uint256)
+        - event: Head2HeadBetUpdated(indexed uint256,indexed address,indexed
+            bytes12,uint256,uint256)
           handler: handleHead2HeadBetUpdated
         - event: Head2HeadEmergencyFundsWithdraw(indexed uint256,address,bytes12,uint256)
           handler: handleHead2HeadEmergencyFundsWithdraw
-        - event: Head2HeadGameCreated(indexed uint256,indexed bytes12[2],indexed string[2],uint256,uint256,uint256,uint256,uint256)
+        - event: Head2HeadGameCreated(indexed uint256,indexed bytes12[2],indexed
+            string[2],uint256,uint256,uint256,uint256,uint256)
           handler: handleHead2HeadGameCreated
         - event: Head2HeadGameWinAmountSent(indexed uint256,address,bytes12,uint256)
           handler: handleHead2HeadGameWinAmountSent
@@ -43,4 +45,4 @@ dataSources:
           handler: handlePaused
         - event: Unpaused(address)
           handler: handleUnpaused
-      file: ./src/h-2-h.ts
+      file: h2h/h2h.wasm

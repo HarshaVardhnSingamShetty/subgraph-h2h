@@ -1,0 +1,1145 @@
+[
+  {
+    "inputs": [],
+    "name": "Head2Head__ArrayLengthsMismatch",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__BetDoesNotExist",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__BetExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__GameForfeited",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__GameNotEnded",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__InvalidBetAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__RewardsAlreadyDistributed",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "stockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "Head2Head__StockIdNotInGame",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__WinningStockNotCalculated",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__WrongGameStatus",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "startIdx",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endIdx",
+        "type": "uint256"
+      }
+    ],
+    "name": "Head2Head__WrongIdxs",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes12",
+        "name": "stockId1",
+        "type": "bytes12"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "stockId2",
+        "type": "bytes12"
+      }
+    ],
+    "name": "Head2Head__WrongStockIds",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Head2Head__WrongTimestamps",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "better",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes12",
+        "name": "stockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "Head2HeadBetCancelled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "better",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes12",
+        "name": "stockId",
+        "type": "bytes12"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "betAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Head2HeadBetPlaced",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "better",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes12",
+        "name": "stockId",
+        "type": "bytes12"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "prevBetAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newBetAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Head2HeadBetUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "better",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes12",
+        "name": "stockId",
+        "type": "bytes12"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "betAmt",
+        "type": "uint256"
+      }
+    ],
+    "name": "Head2HeadEmergencyFundsWithdraw",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes12[2]",
+        "name": "stocks",
+        "type": "bytes12[2]"
+      },
+      {
+        "indexed": true,
+        "internalType": "string[2]",
+        "name": "stockSymbols",
+        "type": "string[2]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "winningMultiplierBasisPoints",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startGameTimestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endGameTimeStamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minBetAmountInWei",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxBetAmountInWei",
+        "type": "uint256"
+      }
+    ],
+    "name": "Head2HeadGameCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes12",
+        "name": "winningStockId",
+        "type": "bytes12"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountSent",
+        "type": "uint256"
+      }
+    ],
+    "name": "Head2HeadGameWinAmountSent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes12[2]",
+        "name": "stockIds",
+        "type": "bytes12[2]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[2]",
+        "name": "startGameStockPricesInWei",
+        "type": "uint256[2]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[2]",
+        "name": "endGameStockPricesInWei",
+        "type": "uint256[2]"
+      }
+    ],
+    "name": "Head2HeadPricesUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "better",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes12",
+        "name": "stockId",
+        "type": "bytes12"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "returnBetAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Head2HeadUpdateOrCancelBetAmountReturned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes12",
+        "name": "winningStockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "Head2HeadWinningStockUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "bets",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "better",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "betAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "stockId",
+        "type": "bytes12"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "win",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "betterGameIds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "_stockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "cancelBet",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes12[2]",
+        "name": "_stockIds",
+        "type": "bytes12[2]"
+      },
+      {
+        "internalType": "string[2]",
+        "name": "_stockSymbols",
+        "type": "string[2]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minBetAmountInWei",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxBetAmountInWei",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_winningMultiplierBasisPoints",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_startGameTimeStamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_endGameTimestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "createGame",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      }
+    ],
+    "name": "emergencyWithdrawFunds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gameId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "gameidIdxOfBetter",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_better",
+        "type": "address"
+      }
+    ],
+    "name": "getBetOfUserInGameId",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "better",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "betAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes12",
+            "name": "stockId",
+            "type": "bytes12"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "winAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "win",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct Head2Head.Head2HeadBet",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_better",
+        "type": "address"
+      }
+    ],
+    "name": "getBetterIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "_stockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "getEndGameStockPriceOfStockId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startIdx",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endIdx",
+        "type": "uint256"
+      }
+    ],
+    "name": "getGameBets",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "better",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "betAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes12",
+            "name": "stockId",
+            "type": "bytes12"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "winAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "win",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct Head2Head.Head2HeadBet[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startIdx",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endIdx",
+        "type": "uint256"
+      }
+    ],
+    "name": "getGameBetters",
+    "outputs": [
+      {
+        "internalType": "address payable[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getGameStatus",
+    "outputs": [
+      {
+        "internalType": "enum Head2Head.GameStatus",
+        "name": "status",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getInGameStockIds",
+    "outputs": [
+      {
+        "internalType": "bytes12[2]",
+        "name": "",
+        "type": "bytes12[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getInGameStockSymbols",
+    "outputs": [
+      {
+        "internalType": "string[2]",
+        "name": "",
+        "type": "string[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_better",
+        "type": "address"
+      }
+    ],
+    "name": "getIsBetter",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "_stockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "getIsStockInGame",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "_stockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "getStartGameStockPriceOfStockId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "head2headGames",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "createGameTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startGameTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endGameTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minBetAmountInWei",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxBetAmountInWei",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winningMultiplierBasisPoints",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isForfeited",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "winningStockId",
+        "type": "bytes12"
+      },
+      {
+        "internalType": "bool",
+        "name": "rewardsDistributed",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalNumberOfBetters",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalBetsPooled",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "_stockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "placeBet",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      }
+    ],
+    "name": "rewardDistribution",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "_stockId",
+        "type": "bytes12"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_updateBetAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateBetAmount",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_gameId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes12[2]",
+        "name": "_stockIds",
+        "type": "bytes12[2]"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "_startGameStockPricesInWei",
+        "type": "uint256[2]"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "_endGameStockPricesInWei",
+        "type": "uint256[2]"
+      },
+      {
+        "internalType": "bytes12",
+        "name": "_winningStockId",
+        "type": "bytes12"
+      }
+    ],
+    "name": "updateResults",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
