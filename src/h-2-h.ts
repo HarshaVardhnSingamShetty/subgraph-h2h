@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, ByteArray, Bytes, ethereum } from "@graphprotocol/graph-ts"
 import {
   h2h,
   Head2HeadBetCancelled,
@@ -105,8 +105,33 @@ export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
   h2hGame.minBet = event.params.minBetAmountInWei
   h2hGame.maxBet = event.params.maxBetAmountInWei
   h2hGame.winningMultiplier = event.params.winningMultiplierBasisPoints
-  h2hGame.stockIds.push(event.params.stocks)
-  h2hGame.stockSymbols.push(event.params.stockSymbols)
+
+  let stockIDs = event.params.stocks;
+  let tempStockIdArr = ethereum.decode("Bytes[]", stockIDs)
+  let finalStockIdArr : Bytes[] = []
+  if(tempStockIdArr){
+    finalStockIdArr = tempStockIdArr.toBytesArray()
+  }
+  let stockIdArr = ((!!finalStockIdArr && finalStockIdArr.length) > 0 )? finalStockIdArr : [];
+
+  if(stockIdArr){
+    h2hGame.stockIds.push(stockIdArr[0])
+    h2hGame.stockIds.push(stockIdArr[1])
+  }
+
+  let stockSymbols = event.params.stockSymbols;
+  let tempStockSymbolArr = ethereum.decode("String[]", stockSymbols);
+  let finalStockSymbolArr : string[] = [];
+  if(tempStockSymbolArr){
+    finalStockSymbolArr = tempStockSymbolArr.toStringArray()
+  }
+  let stockSymbolArr = ((!!finalStockSymbolArr && finalStockSymbolArr.length) > 0 )? finalStockSymbolArr : [];
+
+  if(stockSymbolArr){
+    h2hGame.stockSymbols.push(stockSymbolArr[0])
+    h2hGame.stockSymbols.push(stockSymbolArr[1])
+  }
+  
   h2hGame.save()
 }
 
