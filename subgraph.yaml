@@ -6,7 +6,7 @@ dataSources:
     name: h2h
     network: chapel
     source:
-      address: "0x556eE1C7e058C1FcCc3D02915f38AAf31F98EA44"
+      address: "0x139321E3dE65144ab950d11Ee2a649953f4b2442"
       abi: h2h
       startBlock: 24238953
     mapping:
@@ -27,7 +27,7 @@ dataSources:
           handler: handleHead2HeadBetUpdated
         - event: Head2HeadEmergencyFundsWithdraw(indexed uint256,address,bytes12,uint256)
           handler: handleHead2HeadEmergencyFundsWithdraw
-        - event: Head2HeadGameCreated(indexed uint256,indexed bytes12[2],indexed string[2],uint256,uint256,uint256,uint256,uint256)
+        - event: Head2HeadGameCreated(indexed uint256,bytes12[2],string[2],uint256,uint256,uint256,uint256,uint256)
           handler: handleHead2HeadGameCreated
         - event: Head2HeadGameWinAmountSent(indexed uint256,address,bytes12,uint256)
           handler: handleHead2HeadGameWinAmountSent

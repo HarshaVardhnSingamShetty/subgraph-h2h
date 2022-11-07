@@ -8,6 +8,6 @@ type Head2HeadGame @entity {
   minBet: BigInt!
   maxBet: BigInt!
   winningMultiplier: BigInt!
-  stockIds: Bytes!
-  stockSymbols: Bytes!
+  stockIds: [Bytes!]!
+  stockSymbols: [String!]!
 }

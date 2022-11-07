@@ -98,8 +98,8 @@ contract Head2Head is Ownable, Pausable {
 
     event Head2HeadGameCreated(
         uint256 indexed gameId,
-        bytes12[2] indexed stocks,
-        string[2] indexed stockSymbols,
+        bytes12[2] stocks,
+        string[2] stockSymbols,
         uint256 winningMultiplierBasisPoints,
         uint256 startGameTimestamp,
         uint256 endGameTimeStamp,

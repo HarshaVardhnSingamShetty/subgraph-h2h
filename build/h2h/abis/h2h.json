@@ -231,13 +231,13 @@
         "type": "uint256"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "bytes12[2]",
         "name": "stocks",
         "type": "bytes12[2]"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "string[2]",
         "name": "stockSymbols",
         "type": "string[2]"

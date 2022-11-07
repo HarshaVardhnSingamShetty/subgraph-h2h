@@ -106,68 +106,10 @@ export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
   h2hGame.minBet = event.params.minBetAmountInWei
   h2hGame.maxBet = event.params.maxBetAmountInWei
   h2hGame.winningMultiplier = event.params.winningMultiplierBasisPoints
-
-  let stockIDs = event.params.stocks;
-  //let tempStockIdArr = ethereum.decode(, stockIDs)
-
-//   Event(uint256,address,uint256,uint256,uint256) you can decode the params this way 
-// const receipt = event.receipt;
-// if (receipt) {
-//   const data = receipt.logs[index].data;
-//   const decoded = ethereum.decode("(uint256,address,uint256,uint256,uint256)", data)
-//   const tuple = decoded!.toTuple();
-// }
-
-  //const receipt = event.receipt;
-
-  //log.info("---------Length---------- : {} ", );
-
-  // if (receipt) {
-  //   const data = receipt.logs[0].topics[2];
-  //   const decoded = ethereum.decode("(bytes12[])", data)
-  //   //const tuple = decoded!.toTuple();
-  //   log.info('--------------------- decoded to be displayed: {}', [!!decoded ? decoded.toString() : ""])
-  // }
-
-
+  h2hGame.stockIds = event.params.stocks
+  h2hGame.stockSymbols = event.params.stockSymbols;
   
-
-  
-
-  // let finalStockIdArr : Bytes[] = []
-  // if(tempStockIdArr){
-  //   finalStockIdArr = tempStockIdArr.toBytesArray()
-  // }
-
-  // log.info('Message 1 to be displayed: {}', [finalStockIdArr.toString()])
-
-  // let stockIdArr = ((!!finalStockIdArr && finalStockIdArr.length) > 0 )? finalStockIdArr : [];
-
-  // log.info('Message to be displayed: {}', [stockIdArr.toString()])
-
-  // if(stockIdArr){
-  //   h2hGame.stockIds.push(stockIdArr[0])
-  //   h2hGame.stockIds.push(stockIdArr[1])
-  // }
-
-  h2hGame.stockIds = stockIDs;
-
-  let stockSymbols = event.params.stockSymbols;
-  // let tempStockSymbolArr = ethereum.decode("(string[2])", stockSymbols);
-
-  // let finalStockSymbolArr : string[] = [];
-  // if(tempStockSymbolArr){
-  //   finalStockSymbolArr = tempStockSymbolArr.toStringArray()
-  // }
-  // let stockSymbolArr = ((!!finalStockSymbolArr && finalStockSymbolArr.length) > 0 )? finalStockSymbolArr : [];
-
-  // if(stockSymbolArr){
-  //   h2hGame.stockSymbols.push(stockSymbolArr[0])
-  //   h2hGame.stockSymbols.push(stockSymbolArr[1])
-  // }
-
-  h2hGame.stockSymbols = stockSymbols;
-  
+  //save entity
   h2hGame.save()
 }
 
