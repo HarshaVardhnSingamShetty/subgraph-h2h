@@ -1,8 +1,6 @@
 type Head2HeadGame @entity {
-  id: ID!
-  # count: BigInt!
-  # gameId: BigInt! # uint256
-  # better: Bytes! # address
+  id: ID! #gameID
+  gameId: BigInt!
   startGameTimestamp: BigInt!
   endGameTimestamp: BigInt!
   minBet: BigInt!
@@ -10,4 +8,27 @@ type Head2HeadGame @entity {
   winningMultiplier: BigInt!
   stockIds: [Bytes!]!
   stockSymbols: [String!]!
+  startGameStockPrices: [BigInt!]
+  endGameStockPrices: [BigInt!]
+  winningStockId: Bytes
+  rewardsDistributed: Boolean!
+  totalBetsPooled: BigInt!
+}
+
+type Head2HeadBet @entity {
+  id: ID! #gameId + betterAddress 
+  gameId: BigInt!
+  better: Bytes!
+  betAmount: BigInt!
+  stockId: Bytes!
+  winAmount: BigInt
+  win: Boolean
+}
+
+type Better @entity {
+  id: ID! #address
+  address: Bytes!
+  gameIds: [BigInt!]
+  totalBetAmount: BigInt!
+  totalWinAmont: BigInt
 }

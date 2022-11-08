@@ -15,7 +15,7 @@ import {
   Paused,
   Unpaused
 } from "../generated/h2h/h2h"
-import { Head2HeadGame } from "../generated/schema"
+import { Better, Head2HeadBet, Head2HeadGame } from "../generated/schema"
 
 // export function handleHead2HeadBetCancelled(
 //   event: Head2HeadBetCancelled
@@ -78,29 +78,58 @@ import { Head2HeadGame } from "../generated/schema"
 //   // - contract.paused(...)
 // }
 
-export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {}
+export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
+  let betId = event.params.gameId.toHexString() + event.params.better.toHexString()
+  let h2hBet = new Head2HeadBet(betId)
+  h2hBet.gameId = event.params.gameId
+  h2hBet.better = event.params.better
+  h2hBet.betAmount = event.params.betAmount
+  h2hBet.stockId = event.params.stockId
+  h2hBet.save()
+
+  let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString())
+  if(h2hGame){
+    h2hGame.totalBetsPooled = h2hGame.totalBetsPooled.plus(event.params.betAmount)
+    h2hGame.save()
+  }
+  
+  let h2hBetter = Better.load(event.params.better.toHexString())
+  if(h2hBetter){
+    if(h2hBetter.gameIds){
+      h2hBetter.gameIds!.push(event.params.gameId)
+    }
+    else{
+      h2hBetter.gameIds = []
+      h2hBetter.gameIds!.push(event.params.gameId)
+    }
+    let prevTotal = h2hBetter.totalBetAmount
+    h2hBetter.totalBetAmount = prevTotal.plus(event.params.betAmount)
+  }
+  else{
+    h2hBetter = new Better(event.params.better.toHexString())
+    h2hBetter.address = event.params.better
+    if(h2hBetter.gameIds){
+      h2hBetter.gameIds!.push(event.params.gameId)
+    }
+    else{
+      h2hBetter.gameIds = []
+      h2hBetter.gameIds!.push(event.params.gameId)
+    }
+    h2hBetter.totalBetAmount = event.params.betAmount
+  }
+  h2hBetter.save()
+}
 
 export function handleHead2HeadBetUpdated(event: Head2HeadBetUpdated): void {}
 
 export function handleHead2HeadEmergencyFundsWithdraw(
   event: Head2HeadEmergencyFundsWithdraw
 ): void {}
-// // Look in subgraph.yaml mapping.eventHandlers. Both handlers defined there are present here. 
-// //What this does? 1. imports event NewGravatar (can see this in contract Gravity.sol and subgraph.yaml)
-// export function handleNewGravatar(event: NewGravatar): void {
-//   //2. creates new gravatar entity with below line
-// let gravatar = new Gravatar(event.params.id.toHex()) //This will be the id value in schema.graphql
-// //these will be all other data points specified in sechema.graphql
-// gravatar.owner = event.params.owner 
-// gravatar.displayName = event.params.displayName
-// gravatar.imageUrl = event.params.imageUrl
-// //Saves the entity
-// gravatar.save()
-// }
 
 export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
   //let id = event.transaction.hash
   let h2hGame = new Head2HeadGame(event.params.gameId.toHexString())
+  h2hGame.gameId = event.params.gameId
   h2hGame.startGameTimestamp = event.params.startGameTimestamp
   h2hGame.endGameTimestamp = event.params.endGameTimeStamp
   h2hGame.minBet = event.params.minBetAmountInWei
@@ -108,18 +137,34 @@ export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
   h2hGame.winningMultiplier = event.params.winningMultiplierBasisPoints
   h2hGame.stockIds = event.params.stocks
   h2hGame.stockSymbols = event.params.stockSymbols;
-  
+  h2hGame.rewardsDistributed = false
+  h2hGame.totalBetsPooled = BigInt.fromI32(0)
   //save entity
   h2hGame.save()
 }
 
 export function handleHead2HeadGameWinAmountSent(
   event: Head2HeadGameWinAmountSent
-): void {}
+): void {
+  let h2hGame =  Head2HeadGame.load(event.params.gameId.toHexString())
+  h2hGame!.rewardsDistributed = true
+  let id = event.params.gameId.toHexString() + event.params.winner.toHexString()
+  let h2hBet = Head2HeadBet.load(id)
+  h2hBet!.winAmount = event.params.amountSent
+  h2hBet!.win = true
+  
+  let h2hBetter = Better.load(event.params.winner.toHexString())
+  // h2hBetter!.totalWinAmont += event.params.amountSent
+}
 
 export function handleHead2HeadPricesUpdated(
   event: Head2HeadPricesUpdated
-): void {}
+): void {
+  let h2hGame =  Head2HeadGame.load(event.params.gameId.toHexString())
+  h2hGame!.startGameStockPrices = event.params.startGameStockPricesInWei
+  h2hGame!.endGameStockPrices = event.params.endGameStockPricesInWei
+
+}
 
 export function handleHead2HeadUpdateOrCancelBetAmountReturned(
   event: Head2HeadUpdateOrCancelBetAmountReturned
@@ -127,7 +172,10 @@ export function handleHead2HeadUpdateOrCancelBetAmountReturned(
 
 export function handleHead2HeadWinningStockUpdated(
   event: Head2HeadWinningStockUpdated
-): void {}
+): void {
+  let h2hGame =  Head2HeadGame.load(event.params.gameId.toHexString())
+  h2hGame!.winningStockId = event.params.winningStockId
+}
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
