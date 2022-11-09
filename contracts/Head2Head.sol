@@ -108,21 +108,21 @@ contract Head2Head is Ownable, Pausable {
     );
     event Head2HeadBetPlaced(
         uint256 indexed gameId,
-        address indexed better,
-        bytes12 indexed stockId,
+        address better,
+        bytes12 stockId,
         uint256 betAmount
     );
     event Head2HeadBetUpdated(
         uint256 indexed gameId,
-        address indexed better,
-        bytes12 indexed stockId,
+        address better,
+        bytes12 stockId,
         uint256 prevBetAmount,
         uint256 newBetAmount
     );
     event Head2HeadBetCancelled(
         uint256 indexed gameId,
         address better,
-        bytes12 indexed stockId
+        bytes12 stockId
     );
     event Head2HeadGameWinAmountSent(
         uint256 indexed gameId,
