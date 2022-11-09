@@ -6,9 +6,9 @@ dataSources:
     name: h2h
     network: chapel
     source:
-      address: "0x139321E3dE65144ab950d11Ee2a649953f4b2442"
+      address: "0xC92224FA3E03Dd74Bed170F6f887836a08924eA0"
       abi: h2h
-      startBlock: 24238953
+      startBlock: 24412816
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -19,12 +19,11 @@ dataSources:
         - name: h2h
           file: h2h/abis/h2h.json
       eventHandlers:
-        - event: Head2HeadBetCancelled(indexed uint256,address,indexed bytes12)
+        - event: Head2HeadBetCancelled(indexed uint256,address,bytes12)
           handler: handleHead2HeadBetCancelled
-        - event: Head2HeadBetPlaced(indexed uint256,indexed address,indexed bytes12,uint256)
+        - event: Head2HeadBetPlaced(indexed uint256,address,bytes12,uint256)
           handler: handleHead2HeadBetPlaced
-        - event: Head2HeadBetUpdated(indexed uint256,indexed address,indexed
-            bytes12,uint256,uint256)
+        - event: Head2HeadBetUpdated(indexed uint256,address,bytes12,uint256,uint256)
           handler: handleHead2HeadBetUpdated
         - event: Head2HeadEmergencyFundsWithdraw(indexed uint256,address,bytes12,uint256)
           handler: handleHead2HeadEmergencyFundsWithdraw
@@ -35,7 +34,7 @@ dataSources:
           handler: handleHead2HeadGameWinAmountSent
         - event: Head2HeadPricesUpdated(indexed uint256,bytes12[2],uint256[2],uint256[2])
           handler: handleHead2HeadPricesUpdated
-        - event: Head2HeadUpdateOrCancelBetAmountReturned(uint256,address,bytes12,uint256)
+        - event: Head2HeadUpdateOrCancelBetAmountReturned(indexed uint256,address,bytes12,uint256)
           handler: handleHead2HeadUpdateOrCancelBetAmountReturned
         - event: Head2HeadWinningStockUpdated(indexed uint256,bytes12)
           handler: handleHead2HeadWinningStockUpdated
