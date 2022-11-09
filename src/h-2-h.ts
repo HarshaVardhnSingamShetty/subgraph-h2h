@@ -80,14 +80,16 @@ import { Better, Head2HeadBet, Head2HeadGame } from "../generated/schema"
 
 export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
   let betId = event.params.gameId.toHexString() + event.params.better.toHexString()
+  let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString())
+
   let h2hBet = new Head2HeadBet(betId)
   h2hBet.gameId = event.params.gameId
   h2hBet.better = event.params.better
   h2hBet.betAmount = event.params.betAmount
   h2hBet.stockId = event.params.stockId
+  h2hBet.bet = h2hGame!.id
   h2hBet.save()
 
-  let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString())
   if(h2hGame){
     h2hGame.totalBetsPooled = h2hGame.totalBetsPooled.plus(event.params.betAmount)
     h2hGame.save()

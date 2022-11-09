@@ -13,6 +13,7 @@ type Head2HeadGame @entity {
   winningStockId: Bytes
   rewardsDistributed: Boolean!
   totalBetsPooled: BigInt!
+  bets: [Head2HeadBet!]! @derivedFrom(field: "bet")
 }
 
 type Head2HeadBet @entity {
@@ -23,6 +24,7 @@ type Head2HeadBet @entity {
   stockId: Bytes!
   winAmount: BigInt
   win: Boolean
+  bet: Head2HeadGame!
 }
 
 type Better @entity {
