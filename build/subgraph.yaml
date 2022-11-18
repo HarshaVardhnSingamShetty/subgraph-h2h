@@ -6,9 +6,9 @@ dataSources:
     name: h2h
     network: chapel
     source:
-      address: "0xC92224FA3E03Dd74Bed170F6f887836a08924eA0"
+      address: "0xd6B6B7C99a92076b1A56F2328F9e7413D0a932Fc"
       abi: h2h
-      startBlock: 24412816
+      startBlock: 24679984
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -19,27 +19,25 @@ dataSources:
         - name: h2h
           file: h2h/abis/h2h.json
       eventHandlers:
-        - event: Head2HeadBetCancelled(indexed uint256,address,bytes12)
-          handler: handleHead2HeadBetCancelled
-        - event: Head2HeadBetPlaced(indexed uint256,address,bytes12,uint256)
+        - event: Head2HeadBetPlaced(indexed uint256,address,uint256,bytes12,uint256,uint256)
           handler: handleHead2HeadBetPlaced
-        - event: Head2HeadBetUpdated(indexed uint256,address,bytes12,uint256,uint256)
-          handler: handleHead2HeadBetUpdated
-        - event: Head2HeadEmergencyFundsWithdraw(indexed uint256,address,bytes12,uint256)
-          handler: handleHead2HeadEmergencyFundsWithdraw
+        - event: Head2HeadGameDrawRevertBets(indexed uint256,address,uint256,bytes12,uint256)
+          handler: handleHead2HeadGameDrawRevertBets
         - event: Head2HeadGameCreated(indexed
-            uint256,bytes12[2],string[2],uint256,uint256,uint256,uint256,uint256)
+            uint256,bytes12[2],string[2],uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleHead2HeadGameCreated
-        - event: Head2HeadGameWinAmountSent(indexed uint256,address,bytes12,uint256)
+        - event: Head2HeadGameWinAmountSent(indexed uint256,address,uint256,bytes12,uint256,uint256)
           handler: handleHead2HeadGameWinAmountSent
         - event: Head2HeadPricesUpdated(indexed uint256,bytes12[2],uint256[2],uint256[2])
           handler: handleHead2HeadPricesUpdated
-        - event: Head2HeadUpdateOrCancelBetAmountReturned(indexed uint256,address,bytes12,uint256)
-          handler: handleHead2HeadUpdateOrCancelBetAmountReturned
         - event: Head2HeadWinningStockUpdated(indexed uint256,bytes12)
           handler: handleHead2HeadWinningStockUpdated
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
+        - event: Head2HeadRewardsDistributed(indexed uint256)
+          handler: handleHead2HeadRewardsDistributed
+        - event: Head2HeadReceivedBNB(address,uint256)
+          handler: handleHead2HeadReceivedBNB
+        - event: Head2HeadOddsUpdated(indexed uint256,uint256,uint256)
+          handler: handleHead2HeadOddsUpdated
         - event: Paused(address)
           handler: handlePaused
         - event: Unpaused(address)

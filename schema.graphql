@@ -5,7 +5,10 @@ type Head2HeadGame @entity {
   endGameTimestamp: BigInt!
   minBet: BigInt!
   maxBet: BigInt!
-  winningMultiplier: BigInt!
+  initialMultiplier: BigInt!
+  updateMulAfterAmountInWei: BigInt!
+  curUpdateMulAtAmountInWei: BigInt!
+  isGameDraw: Boolean!
   stockIds: [Bytes!]!
   stockSymbols: [String!]!
   startGameStockPrices: [BigInt!]
@@ -13,11 +16,13 @@ type Head2HeadGame @entity {
   winningStockId: Bytes
   rewardsDistributed: Boolean!
   totalBetsPooled: BigInt!
+  totalBetsInStocks: [BigInt!]!
+  curMultiplierOfStocks: [BigInt!]!
   bets: [Head2HeadBet!]! @derivedFrom(field: "bet")
 }
 
 type Head2HeadBet @entity {
-  id: ID! #gameId + betterAddress 
+  id: ID! #gameId+betterAddress+index
   gameId: BigInt!
   better: Bytes!
   betAmount: BigInt!
@@ -32,5 +37,5 @@ type Better @entity {
   address: Bytes!
   gameIds: [BigInt!]
   totalBetAmount: BigInt!
-  totalWinAmont: BigInt
+  totalWinAmont: BigInt!
 }
