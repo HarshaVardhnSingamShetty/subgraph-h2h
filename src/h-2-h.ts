@@ -79,8 +79,10 @@ export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
 
   let h2hBetter = Better.load(event.params.better.toHexString());
   if (h2hBetter) {
-    if ( h2hBetter.gameIds.indexOf(event.params.gameId) === -1 ) {
-      h2hBetter.gameIds.push(event.params.gameId);
+    if (!h2hBetter.gameIds.includes(event.params.gameId)) {
+      let gameIds = h2hBetter.gameIds;
+      gameIds.push(event.params.gameId);
+      h2hBetter.gameIds = gameIds;
     }
     h2hBetter.totalBetAmount = h2hBetter.totalBetAmount.plus(event.params.betAmount);
   } else {
@@ -186,7 +188,9 @@ export function handleHead2HeadGameWinAmountSent(
 
   let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString())
   if(h2hGame && (h2hGame.winners.indexOf(event.params.winner) === -1)){
-    h2hGame.winners.push(event.params.winner)
+    let gameWinners = h2hGame.winners;
+    gameWinners.push(event.params.winner);
+    h2hGame.winners = gameWinners;
     h2hGame.save()
   }
 
