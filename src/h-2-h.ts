@@ -30,6 +30,7 @@ export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
   h2hGame.stockIds = event.params.stocks;
   h2hGame.stockSymbols = event.params.stockSymbols;
   h2hGame.rewardsDistributed = false;
+  h2hGame.winners = [];
   h2hGame.totalBetsPooled = BigInt.fromI32(0);
   h2hGame.totalBetsInStocks = [BigInt.fromI32(0), BigInt.fromI32(0)];
   h2hGame.curMultiplierOfStocks = [
@@ -53,6 +54,7 @@ export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
   h2hBet.better = event.params.better;
   h2hBet.betAmount = event.params.betAmount;
   h2hBet.stockId = event.params.stockId;
+  h2hBet.index = event.params.index;
   h2hBet.bet = h2hGame!.id;
   h2hBet.save();
 
@@ -77,10 +79,8 @@ export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
 
   let h2hBetter = Better.load(event.params.better.toHexString());
   if (h2hBetter) {
-    if (h2hBetter.gameIds) {
-      h2hBetter.gameIds!.push(event.params.gameId);
-    } else {
-      h2hBetter.gameIds = [event.params.gameId];
+    if ( h2hBetter.gameIds.indexOf(event.params.gameId) === -1 ) {
+      h2hBetter.gameIds.push(event.params.gameId);
     }
     h2hBetter.totalBetAmount = h2hBetter.totalBetAmount.plus(event.params.betAmount);
   } else {
@@ -182,6 +182,12 @@ export function handleHead2HeadGameWinAmountSent(
     }
     
     h2hBetter.save()
+  }
+
+  let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString())
+  if(h2hGame && (h2hGame.winners.indexOf(event.params.winner) === -1)){
+    h2hGame.winners.push(event.params.winner)
+    h2hGame.save()
   }
 
 }
