@@ -1,7 +1,4 @@
-import {
-  BigInt,
-  Bytes
-} from "@graphprotocol/graph-ts";
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 import {
   Head2HeadBetPlaced,
@@ -11,7 +8,7 @@ import {
   Head2HeadPricesUpdated,
   Head2HeadWinningStockUpdated,
   Head2HeadRewardsDistributed,
-  Head2HeadOddsUpdated
+  Head2HeadOddsUpdated,
 } from "../generated/h2h/h2h";
 import { Better, Head2HeadBet, Head2HeadGame } from "../generated/schema";
 
@@ -31,8 +28,9 @@ export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
   h2hGame.stockSymbols = event.params.stockSymbols;
   h2hGame.rewardsDistributed = false;
   h2hGame.winners = [];
-  h2hGame.totalBetsPooled = BigInt.fromI32(0);
-  h2hGame.totalBetsInStocks = [BigInt.fromI32(0), BigInt.fromI32(0)];
+  h2hGame.totalBetAmountPooled = BigInt.fromI32(0);
+  h2hGame.totalNumberOfBets = BigInt.fromI32(0);
+  h2hGame.totalBetAmountsInStocks = [BigInt.fromI32(0), BigInt.fromI32(0)];
   h2hGame.curMultiplierOfStocks = [
     event.params.initialMultiplierInWei,
     event.params.initialMultiplierInWei,
@@ -51,26 +49,31 @@ export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
 
   let h2hBet = new Head2HeadBet(betId);
   h2hBet.gameId = event.params.gameId;
+  h2hBet.timestamp = event.block.timestamp;
   h2hBet.better = event.params.better;
   h2hBet.betAmount = event.params.betAmount;
+  h2hBet.multiplier = event.params.multiplier;
   h2hBet.stockId = event.params.stockId;
   h2hBet.index = event.params.index;
   h2hBet.bet = h2hGame!.id;
   h2hBet.save();
 
   if (h2hGame) {
-    h2hGame.totalBetsPooled = h2hGame.totalBetsPooled.plus(
+    h2hGame.totalBetAmountPooled = h2hGame.totalBetAmountPooled.plus(
       event.params.betAmount
     );
     h2hGame.curUpdateMulAtAmountInWei = event.params.curUpdateMulAtAmountInWei;
+    h2hGame.totalNumberOfBets = h2hGame.totalNumberOfBets.plus(
+      BigInt.fromI32(1)
+    );
     if (event.params.stockId == h2hGame.stockIds[0]) {
-      // if(h2hGame.totalBetsInStocks)
-      h2hGame.totalBetsInStocks[0] = h2hGame.totalBetsInStocks[0].plus(
+      // if(h2hGame.totalBetAmountsInStocks)
+      h2hGame.totalBetAmountsInStocks[0] = h2hGame.totalBetAmountsInStocks[0].plus(
         event.params.betAmount
       );
     } else {
-      // if(h2hGame.totalBetsInStocks)
-      h2hGame.totalBetsInStocks[1] = h2hGame.totalBetsInStocks[1].plus(
+      // if(h2hGame.totalBetAmountsInStocks)
+      h2hGame.totalBetAmountsInStocks[1] = h2hGame.totalBetAmountsInStocks[1].plus(
         event.params.betAmount
       );
     }
@@ -84,14 +87,15 @@ export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
       gameIds.push(event.params.gameId);
       h2hBetter.gameIds = gameIds;
     }
-    h2hBetter.totalBetAmount = h2hBetter.totalBetAmount.plus(event.params.betAmount);
+    h2hBetter.totalBetAmount = h2hBetter.totalBetAmount.plus(
+      event.params.betAmount
+    );
   } else {
     h2hBetter = new Better(event.params.better.toHexString());
     h2hBetter.address = event.params.better;
     h2hBetter.gameIds = [event.params.gameId];
     h2hBetter.totalBetAmount = event.params.betAmount;
-    h2hBetter.totalWinAmont = BigInt.fromI32(0)
-
+    h2hBetter.totalWinAmont = BigInt.fromI32(0);
   }
   h2hBetter.save();
 }
@@ -136,8 +140,8 @@ export function handleHead2HeadGameDrawRevertBets(
 ): void {
   let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString());
   if (h2hGame) {
-    h2hGame.isGameDraw = true
-    h2hGame.save()
+    h2hGame.isGameDraw = true;
+    h2hGame.save();
   }
 
   let id =
@@ -145,16 +149,17 @@ export function handleHead2HeadGameDrawRevertBets(
     event.params.better.toHexString() +
     event.params.index.toHexString();
   let h2hBet = Head2HeadBet.load(id);
-  if(h2hBet){
-    h2hBet.betAmount = BigInt.fromI32(0)
-    h2hBet.save()
+  if (h2hBet) {
+    h2hBet.betAmount = BigInt.fromI32(0);
+    h2hBet.save();
   }
 
   let h2hBetter = Better.load(event.params.better.toHexString());
-  if(h2hBetter){
-    h2hBetter.totalBetAmount = h2hBetter.totalBetAmount.minus(event.params.betAmt)
+  if (h2hBetter) {
+    h2hBetter.totalBetAmount = h2hBetter.totalBetAmount.minus(
+      event.params.betAmt
+    );
   }
-
 }
 
 export function handleHead2HeadGameWinAmountSent(
@@ -169,37 +174,37 @@ export function handleHead2HeadGameWinAmountSent(
   if (h2hBet) {
     h2hBet.winAmount = event.params.amountSent;
     h2hBet.win = true;
-    h2hBet.save()
+    h2hBet.save();
   }
 
   let h2hBetter = Better.load(event.params.winner.toHexString());
   if (h2hBetter) {
-    if (h2hBetter.totalWinAmont){
+    if (h2hBetter.totalWinAmont) {
       h2hBetter.totalWinAmont = h2hBetter.totalWinAmont.plus(
         event.params.amountSent
       );
-    }
-    else {
+    } else {
       h2hBetter.totalWinAmont = event.params.amountSent;
     }
-    
-    h2hBetter.save()
+
+    h2hBetter.save();
   }
 
-  let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString())
-  if(h2hGame && (h2hGame.winners.indexOf(event.params.winner) === -1)){
+  let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString());
+  if (h2hGame && h2hGame.winners.indexOf(event.params.winner) === -1) {
     let gameWinners = h2hGame.winners;
     gameWinners.push(event.params.winner);
     h2hGame.winners = gameWinners;
-    h2hGame.save()
+    h2hGame.save();
   }
-
 }
 
-export function handleHead2HeadRewardsDistributed(event: Head2HeadRewardsDistributed): void{
+export function handleHead2HeadRewardsDistributed(
+  event: Head2HeadRewardsDistributed
+): void {
   let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString());
   if (h2hGame) {
     h2hGame.rewardsDistributed = true;
-    h2hGame.save()
+    h2hGame.save();
   }
 }

@@ -6,9 +6,9 @@ dataSources:
     name: h2h
     network: chapel
     source:
-      address: "0x9D774a93eD55713561b0ce2a23388E2AFa30D1fF"
+      address: "0xC727da883969a80279F9aBd1A5a845561577033f"
       abi: h2h
-      startBlock: 24778953
+      startBlock: 24812042
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -19,7 +19,7 @@ dataSources:
         - name: h2h
           file: h2h/abis/h2h.json
       eventHandlers:
-        - event: Head2HeadBetPlaced(indexed uint256,address,uint256,bytes12,uint256,uint256)
+        - event: Head2HeadBetPlaced(indexed uint256,address,uint256,bytes12,uint256,uint256,uint256)
           handler: handleHead2HeadBetPlaced
         - event: Head2HeadGameDrawRevertBets(indexed uint256,address,uint256,bytes12,uint256)
           handler: handleHead2HeadGameDrawRevertBets
