@@ -10,10 +10,22 @@ import {
   Head2HeadRewardsDistributed,
   Head2HeadOddsUpdated,
 } from "../generated/h2h/h2h";
-import { Better, Head2HeadBet, Head2HeadGame } from "../generated/schema";
+import {
+  Better,
+  Head2HeadBet,
+  Head2HeadGame,
+  TotalH2HDetail,
+} from "../generated/schema";
 
 export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
   //let id = event.transaction.hash
+  let totalH2HDetails = TotalH2HDetail.load("1");
+  if (!totalH2HDetails) {
+    totalH2HDetails = new TotalH2HDetail("1");
+    totalH2HDetails.totalNumOfGames = BigInt.fromI32(0);
+    totalH2HDetails.totalBetAmountWagered = BigInt.fromI32(0);
+    totalH2HDetails.totalRewardsDistributed = BigInt.fromI32(0);
+  }
   let h2hGame = new Head2HeadGame(event.params.gameId.toHexString());
   h2hGame.gameId = event.params.gameId;
   h2hGame.startGameTimestamp = event.params.startGameTimestamp;
@@ -35,9 +47,13 @@ export function handleHead2HeadGameCreated(event: Head2HeadGameCreated): void {
     event.params.initialMultiplierInWei,
     event.params.initialMultiplierInWei,
   ];
-
   //save entity
   h2hGame.save();
+
+  totalH2HDetails.totalNumOfGames = totalH2HDetails.totalNumOfGames.plus(
+    BigInt.fromI32(1)
+  );
+  totalH2HDetails.save();
 }
 export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
   let betId =
@@ -68,14 +84,26 @@ export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
     );
     if (event.params.stockId == h2hGame.stockIds[0]) {
       // if(h2hGame.totalBetAmountsInStocks)
-      h2hGame.totalBetAmountsInStocks[0] = h2hGame.totalBetAmountsInStocks[0].plus(
+      let curBetsInStock0 = h2hGame.totalBetAmountsInStocks[0].plus(
         event.params.betAmount
       );
+      let curBetsInStock1 = h2hGame.totalBetAmountsInStocks[1];
+      let curBets = [curBetsInStock0, curBetsInStock1];
+      h2hGame.totalBetAmountsInStocks = curBets;
+      // h2hGame.totalBetAmountsInStocks[0] = h2hGame.totalBetAmountsInStocks[0].plus(
+      //   event.params.betAmount
+      // );
     } else {
       // if(h2hGame.totalBetAmountsInStocks)
-      h2hGame.totalBetAmountsInStocks[1] = h2hGame.totalBetAmountsInStocks[1].plus(
+      // h2hGame.totalBetAmountsInStocks[1] = h2hGame.totalBetAmountsInStocks[1].plus(
+      //   event.params.betAmount
+      // );
+      let curBetsInStock0 = h2hGame.totalBetAmountsInStocks[0];
+      let curBetsInStock1 = h2hGame.totalBetAmountsInStocks[1].plus(
         event.params.betAmount
       );
+      let curBets = [curBetsInStock0, curBetsInStock1];
+      h2hGame.totalBetAmountsInStocks = curBets;
     }
     h2hGame.save();
   }
@@ -98,13 +126,23 @@ export function handleHead2HeadBetPlaced(event: Head2HeadBetPlaced): void {
     h2hBetter.totalWinAmont = BigInt.fromI32(0);
   }
   h2hBetter.save();
+
+  let totalH2HDetails = TotalH2HDetail.load("1");
+    if (totalH2HDetails) {
+      totalH2HDetails.totalBetAmountWagered = totalH2HDetails.totalBetAmountWagered.plus(
+        event.params.betAmount
+      );
+      totalH2HDetails.save()
+    }
 }
 
 export function handleHead2HeadOddsUpdated(event: Head2HeadOddsUpdated): void {
   let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString());
   if (h2hGame) {
-    h2hGame.curMultiplierOfStocks[0] = event.params.newOddsStock0;
-    h2hGame.curMultiplierOfStocks[1] = event.params.newOddsStock1;
+    let newOdds = [event.params.newOddsStock0, event.params.newOddsStock1];
+    h2hGame.curMultiplierOfStocks = newOdds;
+    // h2hGame.curMultiplierOfStocks[0] = event.params.newOddsStock0;
+    // h2hGame.curMultiplierOfStocks[1] = event.params.newOddsStock1;
     h2hGame.save();
   }
 }
@@ -192,11 +230,21 @@ export function handleHead2HeadGameWinAmountSent(
 
   let h2hGame = Head2HeadGame.load(event.params.gameId.toHexString());
   if (h2hGame && h2hGame.winners.indexOf(event.params.winner) === -1) {
-    let gameWinners = h2hGame.winners;
-    gameWinners.push(event.params.winner);
-    h2hGame.winners = gameWinners;
-    h2hGame.save();
+    if (!h2hGame.winners.includes(event.params.winner)) {
+      let gameWinners = h2hGame.winners;
+      gameWinners.push(event.params.winner);
+      h2hGame.winners = gameWinners;
+      h2hGame.save();
+    }
   }
+
+  let totalH2HDetails = TotalH2HDetail.load("1");
+    if (totalH2HDetails) {
+      totalH2HDetails.totalRewardsDistributed = totalH2HDetails.totalRewardsDistributed.plus(
+        event.params.amountSent
+      );
+      totalH2HDetails.save()
+    }
 }
 
 export function handleHead2HeadRewardsDistributed(

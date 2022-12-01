@@ -44,3 +44,10 @@ type Better @entity {
   totalBetAmount: BigInt!
   totalWinAmont: BigInt!
 }
+
+type TotalH2HDetail @entity {
+  id: String!
+  totalNumOfGames: BigInt!
+  totalBetAmountWagered: BigInt!
+  totalRewardsDistributed: BigInt!
+}

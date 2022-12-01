@@ -6,9 +6,9 @@ dataSources:
     name: h2h
     network: chapel
     source:
-      address: "0xC727da883969a80279F9aBd1A5a845561577033f"
+      address: "0xaF0D1c47F7fCE1ba22E9BA6308f52d7E9C3B5e96"
       abi: h2h
-      startBlock: 24812042
+      startBlock: 25052759
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
